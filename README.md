@@ -24,5 +24,5 @@ The app startup can take a few seconds while the model is loaded. Subsequent loa
 Once done, deactivate the virtual env with `deactivate` from the terminal
 
 <p align="center">
-  <img src="assets/app_screenshot.png" width="500" height="375" />
+  <img src="assets/app_screenshot.png" width="400px" height="200px" />
 </p>
