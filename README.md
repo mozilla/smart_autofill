@@ -1,6 +1,8 @@
 # Smart Autofill
 Autofill HTML Tag Detection
 
+Information about the model can be found here: https://huggingface.co/vazish/mobile_bert_autofill
+
 ## Requirements
 First do the following steps to set up the virtual env and install the requirements,
 
