@@ -1,7 +1,7 @@
 # Smart Autofill
 Autofill HTML Tag Detection
 
-# Requirements
+## Requirements
 First do the following steps to set up the virtual env and install the requirements,
 
 ```
