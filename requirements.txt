@@ -1,0 +1,9 @@
+streamlit
+transformers
+torch
+evaluate==0.4.2
+optimum[onnxruntime]
+onnx
+onnxconverter-common
+numpy
+pandas
