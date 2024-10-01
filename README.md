@@ -21,4 +21,6 @@ The app startup can take a few seconds while the model is loaded. Subsequent loa
 
 Once done, deactivate the virtual env with `deactivate` from the terminal
 
-![Streamlit App](assets/app_screenshot.png "Streamlit App" =50x100)
+<p align="center">
+  <img src="assets/app_screenshot.png" width="500" height="500" />
+</p>
