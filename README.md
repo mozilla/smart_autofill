@@ -1,4 +1,4 @@
-# smart_autofill
+# Smart Autofill
 Autofill HTML Tag Detection
 
 # Requirements
