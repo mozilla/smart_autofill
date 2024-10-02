@@ -1,9 +1,10 @@
 # Smart Autofill
 Autofill HTML Tag Detection
+This repo contains training code for the autofill model that can be used to predict labels (e.g. "Zip Code") from HTML tags.
 
-Information on the model can be found here: https://huggingface.co/vazish/mobile_bert_autofill
+More information on the model can be found here: https://huggingface.co/vazish/mobile_bert_autofill
 
-## Requirements
+### Requirements
 First do the following steps to set up the virtual env and install the requirements,
 
 ```
@@ -13,7 +14,7 @@ source smart_autofill/bin/activate
 pip install -r requirements.txt
 ```
 
-## Running Training & Inference
+### Running Training & Inference
 To run training, just run the commands below. The dataset will be downloaded automatically from hugging face,
 and the base model fine-tuned on it.
 
@@ -33,7 +34,7 @@ cd src
 python predict.py
 ```
 
-## Running the App
+### Running the App
 ```
 cd smart_autofill/app
 python3 -m streamlit run infer.py
