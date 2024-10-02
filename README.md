@@ -41,8 +41,9 @@ python3 -m streamlit run infer.py
 ```
 
 The app startup can take a few seconds while the model is loaded. Subsequent loads should be faster.
+If a local model is present, the model can be loaded by updating `model=...` to the local directory containing the model artifacts.
 
-Once done, deactivate the virtual env with `deactivate` from the terminal
+Once done, deactivate the virtual env with `deactivate` from the terminal.
 
 <p align="center">
   <img src="assets/app_screenshot.png" width="400px" height="200px" />
