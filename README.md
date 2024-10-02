@@ -13,6 +13,26 @@ source smart_autofill/bin/activate
 pip install -r requirements.txt
 ```
 
+## Running Training & Inference
+To run training, just run the commands below. The dataset will be downloaded automatically from hugging face,
+and the base model fine-tuned on it.
+
+```shell
+cd smart_autofill
+source smart_autofill/bin/activate
+cd src
+# removes local cached model, allows increased memory for training then runs training
+rm -rf google && PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0 python train.py
+```
+
+To run inference, update the `predict.py` file to add any tags and run with,
+```shell
+cd smart_autofill
+source smart_autofill/bin/activate
+cd src
+python predict.py
+```
+
 ## Running the App
 ```
 cd smart_autofill/app

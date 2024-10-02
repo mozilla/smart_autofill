@@ -2,8 +2,8 @@ import pandas as pd
 import numpy as np
 import evaluate
 import logging
-import os.path
 import warnings
+import os
 from datasets import load_dataset
 from transformers import (
     AutoTokenizer,
@@ -44,8 +44,10 @@ BEST_HYPERPARAMS = {
 }
 
 DEFAULT_MODEL_PATH = 'google/mobilebert-uncased'
+DEFAULT_FINE_TUNED_MODEL_PATH = 'vazish/mobile_bert_autofill'
 DEFAULT_DATA_PATH = 'vazish/autofill_dataset'
-DEFAULT_SAVE_PATH = './artifacts'
+DEFAULT_SAVE_PATH = 'artifacts'
+DEFAULT_HUGGING_FACE_PATH = 'mobilebert_uncased'
 
 NEGATIVE_LABEL_ID = 16
 
@@ -98,22 +100,26 @@ class AutofillModel:
     def _save_model(self, push_to_hub: bool = False):
         logger.info(f'Saving tokenizer and model to: {self.save_path}')
         label2id = self.dataset['train'].features["labels"]._str2int
-        id2label = {v: k for k, v in id2label.items()}
+        id2label = {v: k for k, v in label2id.items()}
 
         self.tokenizer.save_pretrained(self.save_path)
+        self.trainer.save_model(self.save_path)
+
+        # save with config
         config = AutoConfig.from_pretrained(self.save_path, label2id=label2id, id2label=id2label)
         model = AutoModelForSequenceClassification.from_pretrained(self.save_path, config=config)
         model.save_pretrained(self.save_path)
 
         if push_to_hub:
             # store on hugging face hub, requires login with huggingface-cli login
-            self.trainer.push_to_hub(path)
+            logger.info('Saving to Hugging Face Hub...')
+            self.trainer.push_to_hub(DEFAULT_HUGGING_FACE_PATH)
 
-    def _load_model(self, path: str):
+    def load_model(self, path: str):
         self.pipe = pipeline('text-classification', model=path)
 
     def train(self, save_path=DEFAULT_SAVE_PATH):
-        self.save_path = save_path
+        self.save_path = f'{os.path.abspath(os.getcwd())}/{save_path}'
         # Get the classifier
         self.classifier = AutoModelForSequenceClassification.from_pretrained(
             self.model_name, num_labels=len(self.dataset['train'].features["labels"].names)
@@ -151,7 +157,7 @@ class AutofillModel:
         )
         self.trainer.train()
         logger.info('Done Training \n')
-        self._save_model(save_path)
+        self._save_model(push_to_hub=False)
         self.evaluate()
 
     def predict(self, html_tags: list[str]):
@@ -159,7 +165,7 @@ class AutofillModel:
             self.pipe = pipeline('text-classification', model=self.save_path, truncation=True, batch_size=8)
         return self.pipe(html_tags)
 
-    def evaluate():
+    def evaluate(self):
         def pprint_metrics(y_true, y_preds, with_cm=False):
             logger.info(f'Precision: {precision_score(y_true, y_preds, average="weighted", zero_division=0)}')
             logger.info(f'Recall: {recall_score(y_true, y_preds, average="weighted", zero_division=0)}')
@@ -182,9 +188,10 @@ class AutofillModel:
 
         # Make predictions on test set
         logger.info('Testing metrics... \n')
-        class_label = ds['test'].features['labels'].int2str
-        actuals = class_label(ds['test']['labels'])
-        predictions = self.predict(ds['html_cleaned'])
+        class_label = self.dataset['test'].features['labels'].int2str
+        actuals = class_label(self.dataset['test']['labels'])
+        # following gives predictions in format [{'label': 'Zip Code', 'score': '0.95'}]
+        predictions = [p['label'] for p in self.predict(self.dataset['test']['html_cleaned'])]
         pprint_metrics(actuals, predictions, with_cm=True)
         return
 
