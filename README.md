@@ -1,7 +1,7 @@
 # Smart Autofill
 Autofill HTML Tag Detection
 
-This repo contains training code for the autofill model that can be used to predict labels (e.g. "Zip Code") from HTML tags. More information on the model can be found here: https://huggingface.co/vazish/mobile_bert_autofill.
+This repo contains training code for the autofill model that can be used to predict labels (e.g. "Zip Code") from HTML tags. More information on the model can be found here: https://huggingface.co/Mozilla/tinybert-uncased-autofill.
 
 ### Requirements
 First do the following steps to set up the virtual env and install the requirements,
