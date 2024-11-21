@@ -14,8 +14,9 @@ pip install -r requirements.txt
 ```
 
 ### Running Training & Inference
-To run training, just run the commands below. The dataset will be downloaded automatically from hugging face,
-and the base model fine-tuned on it.
+To run training, first download the HTML dataset to build the dataset from scratch
+(please reach out for a sample dataset if needed, here's [one](https://drive.google.com/file/d/1SU7XUCJ26_8EmUrP3QcOCRHmuI-waIRs/view?usp=drive_link) and another [one](https://huggingface.co/datasets/Mozilla/autofill-dataset) on hugging face), then run the commands below to start the training
+and evaluation.
 
 ```shell
 cd smart_autofill
@@ -25,7 +26,8 @@ cd src
 rm -rf google && PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0 python train.py
 ```
 
-To run inference, update the `predict.py` file to add any tags and run with,
+To run inference, update the `predict.py` file to add any tags and run with
+the following commands once training is done,
 ```shell
 cd smart_autofill
 source smart_autofill/bin/activate

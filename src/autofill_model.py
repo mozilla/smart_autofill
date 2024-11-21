@@ -38,16 +38,16 @@ INPUT_FEATURES = [
 
 BEST_HYPERPARAMS = {
     'learning_rate': 0.000082,
-    'num_train_epochs': 12,
+    'num_train_epochs': 71,
     'weight_decay': 0.1,
     'per_device_train_batch_size': 32,
 }
 
-DEFAULT_MODEL_PATH = 'google/mobilebert-uncased'
-DEFAULT_FINE_TUNED_MODEL_PATH = 'vazish/mobile_bert_autofill'
-DEFAULT_DATA_PATH = 'vazish/autofill_dataset'
+DEFAULT_MODEL_PATH = 'cross-encoder/ms-marco-TinyBERT-L-2'
+DEFAULT_FINE_TUNED_MODEL_PATH = 'Mozilla/tinybert-uncased-autofilll'
+DEFAULT_DATA_PATH = 'Mozilla/autofill-dataset'
 DEFAULT_SAVE_PATH = 'artifacts'
-DEFAULT_HUGGING_FACE_PATH = 'mobilebert_uncased'
+DEFAULT_HUGGING_FACE_PATH = 'tinybert-uncased-autofilll'
 
 NEGATIVE_LABEL_ID = 16
 
@@ -73,9 +73,12 @@ class AutofillModel:
         self.save_path = None
         self.trainer = None
 
-    def load_data(self, path: str = DEFAULT_DATA_PATH):
-        logger.info(f'Loading data from : {path}\n')
-        self.dataset = load_dataset(path)
+    def load_data(self, dataset):
+        if isinstance(dataset, str):
+            logger.info(f'Loading data from : {path}\n')
+            self.dataset = load_dataset(path)
+        else:
+            self.dataset = dataset
 
     def _compute_metrics(self, eval_preds: EvalPrediction):
         # load metrics
@@ -122,7 +125,9 @@ class AutofillModel:
         self.save_path = f'{os.path.abspath(os.getcwd())}/{save_path}'
         # Get the classifier
         self.classifier = AutoModelForSequenceClassification.from_pretrained(
-            self.model_name, num_labels=len(self.dataset['train'].features["labels"].names)
+            self.model_name,
+            num_labels=len(self.dataset['train'].features["labels"].names),
+            ignore_mismatched_sizes=True
         )
 
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)

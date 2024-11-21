@@ -1,6 +1,6 @@
 from autofill_model import AutofillModel, DEFAULT_SAVE_PATH, DEFAULT_FINE_TUNED_MODEL_PATH
 
-USE_LOCAL_MODEL = False # if the model is stored locally
+USE_LOCAL_MODEL = True # if the model is stored locally
 model_path = f'./{DEFAULT_SAVE_PATH}' if USE_LOCAL_MODEL else DEFAULT_FINE_TUNED_MODEL_PATH
 
 def predict(tags):
