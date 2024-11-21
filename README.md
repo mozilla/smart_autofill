@@ -15,7 +15,7 @@ pip install -r requirements.txt
 
 ### Running Training & Inference
 To run training, first download the HTML dataset to build the dataset from scratch
-(please reach out for a sample dataset if needed, here's [one](https://drive.google.com/file/d/1SU7XUCJ26_8EmUrP3QcOCRHmuI-waIRs/view?usp=drive_link) and another [one](https://huggingface.co/datasets/Mozilla/autofill-dataset) on hugging face), then run the commands below to start the training
+(please reach out for a sample dataset if needed, here's [one](https://huggingface.co/datasets/Mozilla/autofill-dataset) on hugging face; a larger dataset is also available), then run the commands below to start the training
 and evaluation.
 
 ```shell
