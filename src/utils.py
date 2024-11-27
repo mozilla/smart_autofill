@@ -2,10 +2,15 @@ import pandas as pd
 import os
 from bs4 import BeautifulSoup
 from datasets import Dataset, DatasetDict
+import re
 
 NEGATIVE_LABEL = 'other'
 seed = 42
-STR_LIMIT = 512
+STR_LIMIT = 2048
+
+def clean_html(html_tag: str) -> str:
+    pattern = r'\s*data-fathom="[^"]*"'
+    return re.sub(pattern, '', html_tag)
 
 def parse_html_to_dataframe(path: str, dataset_type: str) -> pd.DataFrame:
     """
@@ -52,7 +57,7 @@ def parse_html_to_dataframe(path: str, dataset_type: str) -> pd.DataFrame:
             features_dict['autocomplete_text'].append(tag.attrs.get('autocomplete', ''))
             features_dict['placeholder_text'].append(tag.attrs.get('placeholder', ''))
             features_dict['ml_dataset'].append(dataset_type)
-            features_dict['html_cleaned'].append(str(tag)[:STR_LIMIT])
+            features_dict['html_cleaned'].append(clean_html(str(tag))[:STR_LIMIT])
     return pd.DataFrame(features_dict).fillna('')
 
 
@@ -71,7 +76,7 @@ def df_to_dataset(df: pd.DataFrame, samples: int) -> Dataset:
 
     print('Saving dataframe to desktop...')
     df_combined = pd.concat([df_train, df_eval, df_test]).reset_index(drop=True)
-    df_combined.to_csv('~/Desktop/dataset.csv', index=False)
+    df_combined.to_parquet('~/Desktop/dataset.parquet', index=False)
 
     dataset_train, dataset_eval, dataset_test = (
         Dataset.from_pandas(df_train),

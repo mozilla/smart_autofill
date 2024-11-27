@@ -2,9 +2,9 @@ from autofill_model import AutofillModel
 from utils import generate_dataset
 
 def train():
-    html_files_path = '~/Downloads/autofill_html_dataset'
+    html_files_path = '/Users/Vbaungally/Downloads/autofill_html_dataset'
     artifact_path = 'artifacts' # saves models to this path
-    ds = generate_dataset(html_files_path)
+    ds = generate_dataset(html_files_path, samples=20000)
     print(ds)
     model = AutofillModel()
     model.load_data(ds)
